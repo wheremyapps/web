@@ -28,14 +28,14 @@ jobs:
 
       - name: Run tests
         run: |
-          pwd
-          ls -lah
-          #if [ -f docker-compose.test.yml ]; then
-          #  docker-compose --file docker-compose.test.yml build
-          #  docker-compose --file docker-compose.test.yml run sut
-          #else
-          #  docker build --file Dockerfile ../../build/docker/
-          #fi
+          #pwd
+          #ls -lah
+          if [ -f docker-compose.test.yml ]; then
+            docker-compose --file docker-compose.test.yml build
+            docker-compose --file docker-compose.test.yml run sut
+          else
+            docker build build/docker/ --file Dockerfile
+          fi
 
   # Push image to GitHub Package Registry.
   # See also https://docs.docker.com/docker-hub/builds/
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: env #docker build --file Dockerfile --tag image ../../build/docker/
+        run: docker build build/docker/ --file Dockerfile --tag image
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
