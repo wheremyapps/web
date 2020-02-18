@@ -34,7 +34,7 @@ jobs:
             docker-compose --file docker-compose.test.yml build
             docker-compose --file docker-compose.test.yml run sut
           else
-            docker build build/docker/ --file Dockerfile
+            docker build --file Dockerfile build/docker/
           fi
 
   # Push image to GitHub Package Registry.
@@ -50,7 +50,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Build image
-        run: docker build build/docker/ --file Dockerfile --tag image
+        run: docker build --file Dockerfile --tag image build/docker/
 
       - name: Log into registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
